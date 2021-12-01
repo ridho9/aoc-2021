@@ -26,3 +26,5 @@ aoc-*.tar
 /tmp/
 
 config/dev.exs
+
+*.dets
