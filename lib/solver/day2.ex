@@ -5,9 +5,7 @@ defmodule Solver.Day2 do
   def solve(solver) do
     AOC.Util.load(2)
     |> Enum.map(&String.split/1)
-    |> Enum.map(fn [a, b] ->
-      [a, String.to_integer(b)]
-    end)
+    |> Enum.map(fn [a, b] -> [a, String.to_integer(b)] end)
     |> Enum.reduce({0, 0, 0}, solver)
     |> then(fn {a, b, _} -> a * b end)
   end
