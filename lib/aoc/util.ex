@@ -1,5 +1,11 @@
 defmodule AOC.Util do
   def load(day) do
+    load_raw(day)
+    |> String.split("\n")
+    |> Enum.filter(&(&1 != ""))
+  end
+
+  def load_raw(day) do
     {:ok, dets} = :dets.open_file(:"storage.dets", [{:type, :set}])
 
     res =
@@ -11,8 +17,6 @@ defmodule AOC.Util do
           result =
             response.body
             |> String.trim()
-            |> String.split("\n")
-            |> Enum.filter(&(&1 != ""))
 
           :dets.insert(dets, {day, result})
           result
