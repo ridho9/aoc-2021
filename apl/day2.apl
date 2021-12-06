@@ -1,5 +1,5 @@
 #!/usr/bin/env dyalogscript
-i←⊃⎕nget'inputs/2_1'1
+i←⊃⎕nget'inputs/2_1.txt'1
 parse←((⊃⊃),(⍎∘⊃(2⌷⊢)))¨' '(≠⊆⊢)¨⊢
 s1←{
   (c x)←⍵
