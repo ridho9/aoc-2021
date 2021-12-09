@@ -2,9 +2,6 @@
 i←(⍎¨¨)⊃⎕NGET'inputs/3_1.txt'1
 
 filter ← {((2÷⍨≢)⍺⍺(+⌿∘↑))⍵}
-⍝ gamma←2⊥≤filter
-⍝ epsilon←2⊥>filter
-⍝ p1←gamma×epsilon
 p1←×/2∘⊥¨∘(~,⊢)∘((2÷⍨≢)≤+/)
 ⎕←p1 i
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env dyalogscript
-input←⊃⎕nget'inputs/8_x.txt' 1
+input←⊃⎕nget'inputs/8_1.txt' 1
 sider←{' '(≠⊆⊢)⊃⍺⌷⍵⊆⍨'|'≠⍵}
 left←1∘sider
 right←2∘sider
