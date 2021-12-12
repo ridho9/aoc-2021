@@ -1,46 +1,59 @@
 import collections as coll
 import sys
+import itertools
 with open(sys.argv[1]) as f:
     input = [[ord(c)-48 for c in x.strip()] for x in f.readlines()]
 nrow, ncol = len(input), len(input[0])
+input = list(itertools.chain(*input))
 
 def step():
     visited = set()
     toCheck = coll.deque()
 
-    for r in range(nrow):
-        for c in range(ncol):
-            input[r][c] += 1
-            if input[r][c] > 9:
-                toCheck.append((r, c))
+    for r, c in [(r, c) for r in range(nrow) for c in range(ncol)]:
+        p = r*nrow + c
+        input[p] += 1
+        if input[p] > 9:
+            toCheck.append((r, c))
     
-    while len(toCheck) > 0:
+    while toCheck:
         r, c = toCheck.popleft()
-        if (r, c) in visited:
+        p = r*nrow + c
+        if p in visited:
             continue
-        visited.add((r, c))
+        visited.add(p)
         for dr in range(-1, 2):
             for dc in range(-1, 2):
                 rr, cc = r+dr, c+dc
-                if (cc<0) or (cc>=ncol) or (rr<0) or (rr>= nrow) or ((dr==0) and (dc==0)):
+                pp = rr*nrow + cc
+                if (cc<0) or (cc>=ncol) or (rr<0) or (rr>= nrow) or ((dr==0) and (dc==0)) or (pp in visited):
                     continue
-                input[rr][cc] += 1
-                if input[rr][cc] > 9 and not (rr, cc) in visited:
+                input[pp] += 1
+                if input[pp] > 9:
                     toCheck.append((rr, cc))
 
     count = 0
-    for r, c in visited:
+    for p in visited:
         count += 1
-        input[r][c] = 0
-    return count, visited
+        input[p] = 0
+    return count
+    # return len(visited)
 
 total, i = 0, 1
 while True:
-    step_count, step_visited = step()
+    # print("step", i)
+    step_count = step()
     total += step_count
     if i == 100:
         print("P1", total)
-    if len(step_visited) == (nrow*ncol):
+
+    passed = True
+    for r,c in [(r, c) for r in range(nrow) for c in range(ncol)]:
+        if input[r*nrow + c] != 0:
+            passed = False
+            break
+
+    if passed:
         print("P2 sync at", i)
         break
     i += 1
