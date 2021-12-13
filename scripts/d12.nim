@@ -10,43 +10,33 @@ for pair in input:
   graph[a].incl(b)
   graph[b].incl(a)
 
-proc p1(): int64 =
-  var queue = initDeque[(string, seq[string])]()
-  var paths: int64
-  for adj in graph["start"]: queue.addLast((adj, @["start"]))
+proc solve(d: bool): int64 =
+  var queue = initDeque[(string, HashSet[string], bool)]()
+  var paths: int
+  for adj in graph["start"]: queue.addLast((adj, @["start"].toHashSet, d))
+  # var memo: HashSet[(string, HashSet[string], bool)]
 
   while queue.len > 0:
-    var (node, history) = queue.popFirst
-    if node == "end":
-      paths += 1
-      continue
-    if node[0].isLowerAscii and node in history: continue
-    history.add(node)
-    for adj in graph[node]: queue.addLast((adj, history))
-  result = paths
+    var (node, history, canDouble) = queue.popFirst
 
-proc p2(): int64 =
-  var queue = initDeque[(string, Deque[string], string, HashSet[string])]()
-  var paths: HashSet[Deque[string]]
-  for adj in graph["start"]: queue.addLast((adj, @["start"].toDeque, "", @["start"].toHashSet))
+    # if memo.containsOrIncl((node, history, canDouble)):
+    #   echo "can memo ", node, " ", history, " ", canDouble
 
-  while queue.len > 0:
-    var (node, history, double, used) = queue.popFirst
-
-    if node == "end": paths.incl(history)
+    # if node == "end": paths.add(history)
+    if node == "end": paths += 1
     if node == "start" or node == "end": continue
 
     if node[0].isLowerAscii:
-      if used.contains(node):
-        if double != "": continue
-        double = node
-      else:
-        used.incl(node)
+      if node in history:
+        if canDouble == false: continue
+        canDouble = false
 
-    history.addLast(node)
-    for adj in graph[node]: queue.addLast((adj, history, double, used))
+    history.incl(node)
+    for adj in graph[node]:
+      if adj == "start" : continue
+      queue.addLast((adj, history, canDouble))
 
-  result = paths.len
+  result = paths
 
-echo "p1 ", p1()
-echo "p2 ", p2()
+echo "p1 ", solve(false)
+echo "p2 ", solve(true)
