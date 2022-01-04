@@ -1,0 +1,5 @@
+w = int(input())
+x = int((z % 26) + b != w)
+z //= a
+z *= 25*x+1
+z += (w+c)*x
